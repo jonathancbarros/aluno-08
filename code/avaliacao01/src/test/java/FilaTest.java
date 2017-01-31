@@ -23,12 +23,16 @@ public class FilaTest extends TestCase {
     }
 
     public void testRemove() throws Exception {
-        Fila fila = new Fila(-1);
+        Fila fila = new Fila(5);
+        fila.add(1);
+        fila.add(2);
+        fila.add(3);
+        fila.add(4);
+        fila.add(5);
+        fila.remove();
 
         fila.add(1);
-        assertEquals(1, fila.size());
-
-        assertEquals(0, fila.remove());
+        fila.print();
     }
 
     public void testPrint() throws Exception {
@@ -37,14 +41,6 @@ public class FilaTest extends TestCase {
         fila.add(1);
         fila.add(5);
         fila.print();
-    }
-
-    public void testElement() throws Exception {
-        Fila fila = new Fila(-1);
-
-        fila.add(1);
-        fila.add(5);
-        assertEquals(1, fila.element());
     }
 
 }

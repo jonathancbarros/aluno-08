@@ -3,55 +3,78 @@ public class Fila {
 
     private int tamanhoAtual = 0;
     private int[] fila;
+    private int topo = -1;
+    private int calda = 0;
+    private int capacidade;
 
     public Fila(int capacidade) {
-        this.fila = capacidade > 0 ? new int[capacidade] : new int[10];
+        if(capacidade > 0) {
+            this.fila = new int[capacidade];
+            this.capacidade = capacidade;
+        } else {
+            this.fila = new int[10];
+            this.capacidade = 10;
+        }
     }
 
     private boolean checarCapacidadeAtual() {
-        return tamanhoAtual < fila.length;
+        return topo < capacidade - 1;
     }
 
     public void add(int elemento) {
         if(checarCapacidadeAtual()) {
-            fila[tamanhoAtual++] = elemento;
+            fila[++topo] = elemento;
+            tamanhoAtual++;
         } else {
             System.out.println("A fila já está cheia.");
         }
     }
 
     public boolean empty() {
-        return tamanhoAtual == 0;
+        return topo < calda;
     }
 
     public int size () {
         return tamanhoAtual;
     }
 
-    public int remove() {
+    public void remove() {
         if(empty()) {
             throw new FilaVaziaException();
         }
-        return fila[tamanhoAtual--];
+
+        element();
+        calda++;
+        tamanhoAtual--;
+
+        int j = 0;
+        int[] filaSubstituta = new int[capacidade];
+        for(int i = calda; i <= topo; i++) {
+            filaSubstituta[j++] = fila[i];
+        }
+        topo = topo - calda;
+        calda = 0;
+
+        fila = filaSubstituta;
     }
 
     public void print() {
         if(empty()) {
             throw new FilaVaziaException();
         }
-
-        for(int i = 0; i < tamanhoAtual; i++) {
+        for (int i = calda; i <= topo; i++) {
             System.out.print(fila[i]);
             if((i + 1) != tamanhoAtual) {
                 System.out.print(", ");
             }
         }
+        System.out.println();
     }
 
-    public int element() {
+    public void element() {
         if(empty()) {
             throw new FilaVaziaException();
         }
-        return fila[0];
+        System.out.println(fila[calda]);
     }
 }

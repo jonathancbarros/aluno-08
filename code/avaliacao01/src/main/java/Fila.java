@@ -3,8 +3,8 @@ public class Fila {
 
     private int tamanhoAtual = 0;
     private int[] fila;
-    private int topo = -1;
-    private int calda = 0;
+    private int fim = -1;
+    private int inicio = 0;
     private int capacidade;
 
     public Fila(int capacidade) {
@@ -18,12 +18,12 @@ public class Fila {
     }
 
     private boolean checarCapacidadeAtual() {
-        return topo < capacidade - 1;
+        return fim < capacidade - 1;
     }
 
     public void add(int elemento) {
         if(checarCapacidadeAtual()) {
-            fila[++topo] = elemento;
+            fila[++fim] = elemento;
             tamanhoAtual++;
         } else {
             System.out.println("A fila já está cheia.");
@@ -31,7 +31,7 @@ public class Fila {
     }
 
     public boolean empty() {
-        return topo < calda;
+        return fim < inicio;
     }
 
     public int size () {
@@ -44,16 +44,16 @@ public class Fila {
         }
 
         element();
-        calda++;
+        inicio++;
         tamanhoAtual--;
 
         int j = 0;
         int[] filaSubstituta = new int[capacidade];
-        for(int i = calda; i <= topo; i++) {
+        for(int i = inicio; i <= fim; i++) {
             filaSubstituta[j++] = fila[i];
         }
-        topo = topo - calda;
-        calda = 0;
+        fim = fim - inicio;
+        inicio = 0;
 
         fila = filaSubstituta;
     }
@@ -62,7 +62,7 @@ public class Fila {
         if(empty()) {
             throw new FilaVaziaException();
         }
-        for (int i = calda; i <= topo; i++) {
+        for (int i = inicio; i <= fim; i++) {
             System.out.print(fila[i]);
             if((i + 1) != tamanhoAtual) {
                 System.out.print(", ");
@@ -75,6 +75,6 @@ public class Fila {
         if(empty()) {
             throw new FilaVaziaException();
         }
-        System.out.println(fila[calda]);
+        System.out.println(fila[inicio]);
     }
 }

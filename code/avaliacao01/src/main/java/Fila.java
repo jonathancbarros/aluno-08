@@ -17,16 +17,16 @@ public class Fila {
         }
     }
 
-    private boolean checarCapacidadeAtual() {
+    private boolean temEspaco() {
         return fim < capacidade - 1;
     }
 
     public void add(int elemento) {
-        if(checarCapacidadeAtual()) {
+        if(temEspaco()) {
             fila[++fim] = elemento;
             tamanhoAtual++;
         } else {
-            throw new FilaCheiaException();
+            throw new RuntimeException("A Fila está cheia");
         }
     }
 
@@ -40,9 +40,8 @@ public class Fila {
 
     public int remove() {
 
-        if(empty()) {
-            throw new FilaVaziaException();
-        }
+        if(empty())
+            throw new RuntimeException("A fila está vazia");
 
         int elemento = fila[inicio];
 
@@ -58,26 +57,29 @@ public class Fila {
         inicio = 0;
 
         fila = filaSubstituta;
+
         return elemento;
     }
 
-    public void print() {
-        if(empty()) {
-            throw new FilaVaziaException();
-        }
+    public String print() {
+        if(empty())
+            throw new RuntimeException("A fila está vazia");
+
+        String texto = "";
         for (int i = inicio; i <= fim; i++) {
-            System.out.print(fila[i]);
+            texto += fila[i];
             if((i + 1) != tamanhoAtual) {
-                System.out.print(", ");
+                texto += ", ";
             }
         }
-        System.out.println();
+
+        return texto;
     }
 
     public int element() {
-        if(empty()) {
-            throw new FilaVaziaException();
-        }
+        if(empty())
+            throw new RuntimeException("A fila está vazia");
+
         return fila[inicio];
     }
 

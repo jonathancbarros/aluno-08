@@ -11,7 +11,6 @@ public class FilaTest extends TestCase {
         assertEquals(10, new Fila(0).getCapacidade());
     }
 
-
     public void testAdd() throws Exception {
         Fila fila = new Fila(3);
         fila.add(Integer.MAX_VALUE);
@@ -25,7 +24,7 @@ public class FilaTest extends TestCase {
         fila.add(0);
         try {
             fila.add(1);
-        } catch (FilaCheiaException e) {
+        } catch (RuntimeException e) {
             System.out.println(e.getMessage());
         }
     }
@@ -41,18 +40,11 @@ public class FilaTest extends TestCase {
        Fila fila = new Fila(0);
         try {
             fila.remove();
-        } catch (FilaVaziaException e) {
+        } catch (RuntimeException e) {
             System.out.println(e.getMessage());
 
         }
     }
-
-    /*public void testPrint() throws Exception {
-        Fila fila = new Fila(-1);
-        fila.add(1);
-        fila.add(5);
-        fila.print();
-    }*/
 
     public void testEmpty() throws Exception {
         Fila fila = new Fila(1);
@@ -76,12 +68,25 @@ public class FilaTest extends TestCase {
         Fila fila = new Fila(2);
         try {
             fila.element();
-        } catch (FilaVaziaException e) {
+        } catch (RuntimeException e) {
             System.out.println(e.getMessage());
         }
         fila.add(10);
         assertEquals(10, fila.element());
         fila.add(15);
         assertEquals(10, fila.element());
+    }
+
+    public void testPrint() throws Exception {
+        Fila fila = new Fila(3);
+        try {
+            fila.print();
+            fila.add(1);
+            assertEquals("1", fila.print());
+            fila.add(2);
+            assertEquals("1, 2", fila.print());
+        } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

@@ -8,7 +8,7 @@ public class Fila {
     private int capacidade;
 
     public Fila(int capacidade) {
-        if(capacidade > 0) {
+        if(capacidade > 0 && capacidade < Integer.MAX_VALUE) {
             this.fila = new int[capacidade];
             this.capacidade = capacidade;
         } else {
@@ -26,7 +26,7 @@ public class Fila {
             fila[++fim] = elemento;
             tamanhoAtual++;
         } else {
-            System.out.println("A fila já está cheia.");
+            throw new FilaCheiaException();
         }
     }
 
@@ -38,12 +38,14 @@ public class Fila {
         return tamanhoAtual;
     }
 
-    public void remove() {
+    public int remove() {
+
         if(empty()) {
             throw new FilaVaziaException();
         }
 
-        element();
+        int elemento = fila[inicio];
+
         inicio++;
         tamanhoAtual--;
 
@@ -56,6 +58,7 @@ public class Fila {
         inicio = 0;
 
         fila = filaSubstituta;
+        return elemento;
     }
 
     public void print() {
@@ -71,10 +74,14 @@ public class Fila {
         System.out.println();
     }
 
-    public void element() {
+    public int element() {
         if(empty()) {
             throw new FilaVaziaException();
         }
-        System.out.println(fila[inicio]);
+        return fila[inicio];
+    }
+
+    public int getCapacidade() {
+        return capacidade;
     }
 }

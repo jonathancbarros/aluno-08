@@ -1,46 +1,87 @@
-
-
 import junit.framework.TestCase;
+import org.junit.Rule;
+import org.junit.Test;
 
-/**
- * Created by Jonathan Correia de Barros on 31/01/17.
- *
- */
 public class FilaTest extends TestCase {
+
+    public void testGetCapacidade() throws Exception {
+        assertEquals(10, new Fila(Integer.MAX_VALUE).getCapacidade());
+        assertEquals(10, new Fila(Integer.MIN_VALUE).getCapacidade());
+        assertEquals(5,  new Fila(5).getCapacidade());
+        assertEquals(10, new Fila(0).getCapacidade());
+    }
+
+
     public void testAdd() throws Exception {
-        Fila fila = new Fila(-1);
+        Fila fila = new Fila(3);
+        fila.add(Integer.MAX_VALUE);
+        fila.add(Integer.MIN_VALUE);
+        fila.add(0);
+        assertEquals(3, fila.size());
+    }
 
-        fila.add(1);
-        assertEquals(1, fila.size());
-
-        int i = 0;
-        while(i < 9) {
+    public void testAdicionarEmFilaCheia() {
+        Fila fila = new Fila(1);
+        fila.add(0);
+        try {
             fila.add(1);
-            i++;
+        } catch (FilaCheiaException e) {
+            System.out.println(e.getMessage());
         }
-        fila.add(1);
-        assertEquals(10, fila.size());
     }
 
     public void testRemove() throws Exception {
-        Fila fila = new Fila(5);
-        fila.add(1);
-        fila.add(2);
-        fila.add(3);
-        fila.add(4);
-        fila.add(5);
-        fila.remove();
-
-        fila.add(1);
-        fila.print();
-    }
-
-    public void testPrint() throws Exception {
         Fila fila = new Fila(-1);
+        fila.add(1);
+        fila.remove();
+        assertEquals(0, fila.size());
+    }
 
+    public void testRemoverEmFilaVazia() throws Exception {
+       Fila fila = new Fila(0);
+        try {
+            fila.remove();
+        } catch (FilaVaziaException e) {
+            System.out.println(e.getMessage());
+
+        }
+    }
+
+    /*public void testPrint() throws Exception {
+        Fila fila = new Fila(-1);
         fila.add(1);
         fila.add(5);
         fila.print();
+    }*/
+
+    public void testEmpty() throws Exception {
+        Fila fila = new Fila(1);
+        assertEquals(true, fila.empty());
+        fila.add(1);
+        assertEquals(false, fila.empty());
+        fila.remove();
+        assertEquals(true, fila.empty());
     }
 
+    public void testSize() throws Exception {
+        Fila fila = new Fila(2);
+        assertEquals(0, fila.size());
+        fila.add(1);
+        assertEquals(1, fila.size());
+        fila.remove();
+        assertEquals(0, fila.size());
+    }
+
+    public void testElement() throws Exception {
+        Fila fila = new Fila(2);
+        try {
+            fila.element();
+        } catch (FilaVaziaException e) {
+            System.out.println(e.getMessage());
+        }
+        fila.add(10);
+        assertEquals(10, fila.element());
+        fila.add(15);
+        assertEquals(10, fila.element());
+    }
 }

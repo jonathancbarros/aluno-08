@@ -1,10 +1,10 @@
 
 public class Fila {
 
-    private int tamanhoAtual = 0;
-    private int[] fila;
-    private int fim = -1;
-    private int inicio = 0;
+    private int tamanhoAtual;
+    private int [] fila;
+    private int fim;
+    private int inicio;
     private int capacidade;
 
     public Fila(int capacidade) {
@@ -15,6 +15,13 @@ public class Fila {
             this.fila = new int[10];
             this.capacidade = 10;
         }
+        initAtributos();
+    }
+
+    private void initAtributos() {
+        tamanhoAtual = 0;
+        fim = -1;
+        inicio = 0;
     }
 
     private boolean temEspaco() {
@@ -72,6 +79,7 @@ public class Fila {
                 texto += ", ";
             }
         }
+        initAtributos();
 
         return texto;
     }

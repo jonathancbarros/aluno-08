@@ -28,13 +28,47 @@ public class Fila {
         return fim < capacidade - 1;
     }
 
+    private void checkRep() {
+        assert(0 <= tamanhoAtual && tamanhoAtual <= capacidade);
+    }
+
     public void add(int elemento) {
         if(temEspaco()) {
             fila[++fim] = elemento;
             tamanhoAtual++;
+            checkRep();
         } else {
             throw new RuntimeException("A Fila está cheia");
         }
+    }
+
+    public boolean enqueue(int x) {
+        if(tamanhoAtual == capacidade)
+            return false;
+
+        fila[++fim] = x;
+        tamanhoAtual++;
+
+        if(fila[fim] == capacidade)
+            fim = 0;
+
+        checkRep();
+        return true;
+    }
+
+    public Integer dequeue() {
+        if (tamanhoAtual == 0)
+            return null;
+
+        int x = fila[inicio];
+        tamanhoAtual--;
+        inicio++;
+
+        if (inicio == capacidade)
+            inicio = 0;
+
+        checkRep();
+        return x;
     }
 
     public boolean empty() {
@@ -64,6 +98,8 @@ public class Fila {
         inicio = 0;
 
         fila = filaSubstituta;
+
+        checkRep();
 
         return elemento;
     }

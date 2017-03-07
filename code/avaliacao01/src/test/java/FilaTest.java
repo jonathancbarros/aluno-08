@@ -1,8 +1,21 @@
 import junit.framework.TestCase;
-import org.junit.Rule;
-import org.junit.Test;
 
 public class FilaTest extends TestCase {
+
+    public void testEnqueue() throws Exception {
+        Fila fila = new Fila(3);
+        fila.enqueue(Integer.MAX_VALUE);
+        fila.enqueue(Integer.MIN_VALUE);
+        fila.enqueue(0);
+        assertEquals(3, fila.size());
+    }
+
+    public void testDequeue() throws Exception {
+        Fila fila = new Fila(-1);
+        fila.enqueue(1);
+        fila.dequeue();
+        assertEquals(0, fila.size());
+    }
 
     public void testGetCapacidade() throws Exception {
         assertEquals(10, new Fila(Integer.MAX_VALUE).getCapacidade());

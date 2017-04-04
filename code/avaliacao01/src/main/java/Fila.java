@@ -1,70 +1,49 @@
+import java.util.ArrayList;
 
 public class Fila {
 
-    private int tamanhoAtual;
-    private int [] fila;
-    private int fim;
-    private int inicio;
     private int capacidade;
+    private ArrayList<Integer> fila;
 
     public Fila(int capacidade) {
         if(capacidade > 0 && capacidade < Integer.MAX_VALUE) {
-            this.fila = new int[capacidade];
             this.capacidade = capacidade;
         } else {
-            this.fila = new int[10];
             this.capacidade = 10;
         }
-        initAtributos();
+        inicializarFila();
     }
 
-    private void initAtributos() {
-        tamanhoAtual = 0;
-        fim = -1;
-        inicio = 0;
+    private void inicializarFila() {
+        this.fila = new ArrayList<Integer>();
     }
 
     private boolean temEspaco() {
-        return fim < capacidade - 1;
+        return fila.size() < capacidade;
     }
 
     public void add(int elemento) {
         if(temEspaco()) {
-            fila[++fim] = elemento;
-            tamanhoAtual++;
+            fila.add(size(), elemento);
         } else {
             throw new RuntimeException("A Fila está cheia");
         }
     }
 
     public boolean empty() {
-        return fim < inicio;
+        return fila.isEmpty();
     }
 
     public int size () {
-        return tamanhoAtual;
+        return fila.size();
     }
 
     public int remove() {
-
         if(empty())
             throw new RuntimeException("A fila está vazia");
 
-        int elemento = fila[inicio];
-
-        inicio++;
-        tamanhoAtual--;
-
-        int j = 0;
-        int[] filaSubstituta = new int[capacidade];
-        for(int i = inicio; i <= fim; i++) {
-            filaSubstituta[j++] = fila[i];
-        }
-        fim = fim - inicio;
-        inicio = 0;
-
-        fila = filaSubstituta;
-
+        int elemento = fila.get(0);
+        fila.remove(0);
         return elemento;
     }
 
@@ -73,13 +52,13 @@ public class Fila {
             throw new RuntimeException("A fila está vazia");
 
         String texto = "";
-        for (int i = inicio; i <= fim; i++) {
-            texto += fila[i];
-            if((i + 1) != tamanhoAtual) {
+        for (int i = 0; i <= fila.size() - 1; i++) {
+            texto += fila.get(i);
+            if(i != fila.size() - 1) {
                 texto += ", ";
             }
         }
-        initAtributos();
+        inicializarFila();
 
         return texto;
     }
@@ -88,7 +67,7 @@ public class Fila {
         if(empty())
             throw new RuntimeException("A fila está vazia");
 
-        return fila[inicio];
+        return fila.get(0);
     }
 
     public int getCapacidade() {

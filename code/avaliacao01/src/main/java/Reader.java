@@ -5,22 +5,24 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Random;
-
 public class Reader {
 
-    private int read_fi(FileInputStream in, byte[] buffer, int offset) throws IOException {
-        int toRead = new Random().nextInt() % (buffer.length - offset) + 1;
+    private int read_fi(FileInputStream in, byte[] buff, int offset) throws IOException{
 
-        if (toRead < 0) {
+        int toRead = (buff.length - offset) == 0 ?
+                1 : new Random().nextInt() % (buff.length - offset) + 1;
+
+        if (toRead < -2) {
             throw new IOException();
         }
-        return in.read(buffer, 0, toRead);
+
+        else if (toRead < 0) {
+            throw new FileNotFoundException();
+        }
+
+        return in.read(buff, 0, toRead);
     }
 
-    /**
-     * @param file - Um arquivo contendo qualquer tipo de conteúdo.
-     * @return null caso o arquivo não exista ou não foi encontrado.
-     */
     public byte[] readAll(File file) {
         int size = (int) file.length();
         byte[] data = new byte[0];

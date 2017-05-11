@@ -1,77 +1,44 @@
 import com.google.gson.Gson;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Arrays;
 
 public class Sisu {
 
-    private ArrayList<Instituicao> instituicoes = new ArrayList<Instituicao>();
-    private ArrayList<Curso> cursos = new ArrayList<Curso>();
-    private ArrayList<Candidato> candidatos = new ArrayList<Candidato>();
+    //private ArrayList<Instituicao> instituicoes;
+    private ArrayList<Curso> cursos;
+    private ArrayList<Candidato> candidatos;
 
-    public Sisu() {}
+    private Gson gson = new Gson();
 
-    private JSONArray turnJsonIntoArray(FileReader file) {
+    public Sisu(FileReader instituicoesJson) {
+        registrarInstituicoes(instituicoesJson);
+    }
 
-        JSONParser parser = new JSONParser();
-        Object json = new Object();
+    public Sisu(FileReader instituicoesJson, FileReader cursosJson, FileReader candidatosJson) {
+        registrarInstituicoes(instituicoesJson);
+        registrarCursos(cursosJson);
+        registrarCandidatos(candidatosJson);
+    }
 
-        try {
-            json = parser.parse(file);
-            if (json instanceof JSONObject) {
-                throw new Exception("O Json passado está vazio");
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    private void registrarInstituicoes(FileReader instituicoesJson) {
+        Instituicao[] instituicoes = gson.fromJson(instituicoesJson, Instituicao[].class);
+        Instituicao.setUp(instituicoes);
+    }
 
-        if(json instanceof JSONArray) {
-            return (JSONArray) json;
-        } else {
-            throw new ClassCastException("Json inválido, não pôde ser convertido em array.");
+    public void registrarCursos(FileReader cursosJson) {
+        Curso[] cursos = gson.fromJson(cursosJson, Curso[].class);
+        this.cursos = new ArrayList<Curso>(Arrays.asList(cursos));
+
+        for (Curso curso : this.cursos) {
+            curso.init();
         }
     }
 
-    public void registrarInstituicoes(FileReader instituicoesJson) throws FileNotFoundException {
-        Gson gson = new Gson();
-        JSONArray array = turnJsonIntoArray(instituicoesJson);
-
-        for (Object anArray : array) {
-            Instituicao instituicao = gson.fromJson(gson.toJson(anArray), Instituicao.class);
-            this.instituicoes.add(instituicao);
-        }
-    }
-
-    public void registrarCursos(FileReader cursosJson) throws FileNotFoundException {
-        Gson gson = new Gson();
-        JSONArray array = turnJsonIntoArray(cursosJson);
-
-        for (Object anArray : array) {
-            Curso curso = gson.fromJson(gson.toJson(anArray), Curso.class);
-            curso.calcularVagasReservadas();
-            cursos.add(curso);
-        }
-    }
-
-    public void registrarCandidatos(FileReader candidatosJson) throws FileNotFoundException {
-        Gson gson = new Gson();
-        JSONArray array = turnJsonIntoArray(candidatosJson);
-
-        for (Object anArray : array) {
-            Candidato candidato = gson.fromJson(gson.toJson(anArray), Candidato.class);
-            candidatos.add(candidato);
-        }
+    public void registrarCandidatos(FileReader candidatosJson) {
+        Candidato[] candidatos = gson.fromJson(candidatosJson, Candidato[].class);
+        this.candidatos = new ArrayList<Candidato>(Arrays.asList(candidatos));
     }
 
     public void realizarApuracao() {

@@ -4,40 +4,66 @@ import java.util.Comparator;
 import java.util.HashMap;
 
 public class Curso implements Constants {
-
+    // Propriedades Padrões:
     private int id;
     private String nome;
     private int idInstituicao;
     private int vagasOfertadas;
-    private HashMap<Integer, Integer> vagasReservadas;
-    private int totalVagasReservadas;
-    private int vagasComuns;
 
+    // Propriedades Computadas:
+    //private Instituicao instituicao;
+    private int vagasComuns;
+    private int totalVagasReservadas;
+    private HashMap<Integer, Integer> vagasReservadas;
     private ArrayList<Candidato> aprovadosVagasComum;
     private ArrayList<Candidato> aprovadosVagasReservadasTipo1;
     private ArrayList<Candidato> aprovadosVagasReservadasTipo2;
     private ArrayList<Candidato> aprovadosVagasReservadasTipo3;
     private ArrayList<Candidato> aprovadosVagasReservadasTipo4;
 
-
     public Curso(int id, String nome, int idInstituicao, int vagasOfertadas) {
         this.id = id;
         this.nome = nome;
         this.idInstituicao = idInstituicao;
         this.vagasOfertadas = vagasOfertadas;
+    }
+
+    public void init() {
+        //this.instituicao = Instituicao.getInstituicaoById(idInstituicao);
         calcularVagasReservadas();
+    }
+
+    private String nomeInstituicao() {
+        Instituicao instituicao = Instituicao.getInstituicaoById(idInstituicao);
+
+        if(instituicao != null) {
+            return instituicao.getNome();
+        }
+
+        return "Instituição não encontrada";
+    }
+
+    public HashMap<Integer, Integer> getVagasReservadas() {
+        return vagasReservadas;
+    }
+
+    public int getTotalVagasReservadas() {
+        return totalVagasReservadas;
+    }
+
+    public int getVagasComuns() {
+        return vagasComuns;
     }
 
     /**
      * Por ordem de preferência no cálculo das vagas reservadas:
-     *
+     * <p>
      * Tipo 2: Pobre (<= 1,5 salários per capita) + Escola Pública
      * Tipo 4: Não-pobre (> 1,5 salários per capita) + Escola Pública
      * Tipo 3: Não-pobre (> 1,5 salários per capita) + Escola Pública + [Preto, pardo ou indígena]
      * Tipo 1: Pobre (<= 1,5 salários per capita) + Escola Pública + [Preto, pardo ou indígena]
      */
-    public void calcularVagasReservadas()
-    {
+    public void calcularVagasReservadas() {
         this.vagasReservadas = new HashMap<Integer, Integer>();
 
         if (vagasOfertadas <= 0) {
@@ -130,7 +156,8 @@ public class Curso implements Constants {
 
     @Override
     public String toString() {
-        return " Nome do Curso: " + nome +
+        return " Universidade: " + this.nomeInstituicao() +
+                "\n Curso: " + nome +
                 "\n Vagas Ofertadas: " + vagasOfertadas +
                 "\n Vagas Comuns: " + vagasComuns +
                 "\n Vagas Reservadas Tipo 1: " + vagasReservadas.get(TIPO_1) +
@@ -138,6 +165,5 @@ public class Curso implements Constants {
                 "\n Vagas Reservadas Tipo 3: " + vagasReservadas.get(TIPO_3) +
                 "\n Vagas Reservadas Tipo 4: " + vagasReservadas.get(TIPO_4) +
                 "\n";
-
     }
 }

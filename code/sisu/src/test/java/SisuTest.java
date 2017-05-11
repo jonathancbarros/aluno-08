@@ -1,10 +1,6 @@
 import org.junit.Test;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
-
-import static org.junit.Assert.*;
 
 
 public class SisuTest {
@@ -15,7 +11,7 @@ public class SisuTest {
         sisu.registrarCursos();
     }*/
 
-    @Test
+    /*@Test
     public void registrarInstituicoesSemArquivo() throws Exception {
         Sisu sisu = new Sisu();
         try {
@@ -24,9 +20,9 @@ public class SisuTest {
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
         }
-    }
+    }*/
 
-    @Test
+    /*@Test
     public void registrarInstituicoesComArquivoVazio() throws Exception {
         Sisu sisu = new Sisu();
         try {
@@ -35,26 +31,28 @@ public class SisuTest {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-    }
+    }*/
 
     @Test
     public void registrarCursos() throws Exception {
-        Sisu sisu = new Sisu();
+        Sisu sisu = new Sisu(new FileReader("src/main/resources/instituicoes.json"));
         sisu.registrarCursos(new FileReader("src/main/resources/cursos.json"));
     }
 
     @Test
     public void registrarCandidatos() throws Exception {
-        Sisu sisu = new Sisu();
+        Sisu sisu = new Sisu(new FileReader("src/main/resources/instituicoes.json"));
         sisu.registrarCandidatos(new FileReader("src/main/resources/candidatos.json"));
     }
 
     @Test
     public void realizarApuracao() throws Exception {
-        Sisu sisu = new Sisu();
-        sisu.registrarInstituicoes(new FileReader("src/main/resources/instituicoes.json"));
-        sisu.registrarCursos(new FileReader("src/main/resources/cursos.json"));
-        sisu.registrarCandidatos(new FileReader("src/main/resources/candidatos.json"));
+        Sisu sisu = new Sisu(
+                new FileReader("src/main/resources/instituicoes.json"),
+                new FileReader("src/main/resources/cursos.json"),
+                new FileReader("src/main/resources/candidatos.json")
+        );
+
         sisu.realizarApuracao();
         sisu.printListDeAprovados();
     }

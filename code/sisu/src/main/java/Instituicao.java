@@ -6,7 +6,7 @@ public class Instituicao {
     private int id;
     private String nome;
 
-    public static ArrayList<Instituicao> instituicoes;
+    private static ArrayList<Instituicao> instituicoes;
 
     public Instituicao(int id, String nome) {
         this.id = id;
@@ -17,16 +17,34 @@ public class Instituicao {
         Instituicao.instituicoes = new ArrayList<Instituicao>(Arrays.asList(instituicoes));
     }
 
-    public static Instituicao getInstituicaoById(int id) {
+    public static Instituicao getInstituicaoById(int id) throws Exception {
+
+        if (Instituicao.instituicoes.isEmpty()) {
+            throw new Exception("Não há instituições cadastradas");
+        }
+
         for (Instituicao instituicao: instituicoes) {
             if (instituicao.id == id) {
                 return instituicao;
             }
         }
+
         return null;
+    }
+
+    public static String getNomeInstituicaoById(int id) throws Exception {
+
+        Instituicao instituicao = getInstituicaoById(id);
+
+        if (instituicao != null) {
+            return instituicao.getNome();
+        }
+
+        return "Instituição não encontrada";
     }
 
     public String getNome() {
         return nome;
     }
+
 }

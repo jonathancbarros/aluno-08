@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Candidato implements Constants{
 
@@ -11,8 +13,14 @@ public class Candidato implements Constants{
     private double notaEnem;
     private int etnia;
 
-    public boolean isBranco() {
-        return etnia == BRANCO;
+    private static ArrayList<Candidato> candidatos = new ArrayList<Candidato>();
+
+    public static ArrayList<Candidato> getCandidatos() {
+        return candidatos;
+    }
+
+    public static void setUp(Candidato[] candidatos) {
+        Candidato.candidatos = new ArrayList<Candidato>(Arrays.asList(candidatos));
     }
 
     public Candidato(int id, String nome, boolean escolaPublica, double rendaPerCapita,
@@ -26,6 +34,10 @@ public class Candidato implements Constants{
         this.tipoCota = tipoCota;
         this.notaEnem = notaEnem;
         this.etnia = etnia;
+    }
+
+    public boolean isBranco() {
+        return etnia == BRANCO;
     }
 
     public int getIdCursoPrimeiraOpcao() {

@@ -1,7 +1,6 @@
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
+import com.google.gson.JsonSyntaxException;
+
+import java.util.*;
 
 public class Curso implements Constants {
     // Propriedades Padrões:
@@ -11,7 +10,6 @@ public class Curso implements Constants {
     private int vagasOfertadas;
 
     // Propriedades Computadas:
-    //private Instituicao instituicao;
     private int vagasComuns;
     private int totalVagasReservadas;
     private HashMap<Integer, Integer> vagasReservadas;
@@ -28,19 +26,78 @@ public class Curso implements Constants {
         this.vagasOfertadas = vagasOfertadas;
     }
 
-    public void init() {
-        //this.instituicao = Instituicao.getInstituicaoById(idInstituicao);
-        calcularVagasReservadas();
+    // Propriedades e operações estáticas para manter o estado da aplicação:
+    private static ArrayList<Curso> cursos = new ArrayList<Curso>();
+
+    public static ArrayList<Curso> getCursos() {
+        return cursos;
+    }
+
+    /**
+     * Função para receber um array do tipo Curso e adicionar a lista estática de cursos
+     * @param cursos
+     */
+    public static void setUp(Curso[] cursos) {
+        try {
+            for (Curso curso : Arrays.asList(cursos)) {
+                if (Instituicao.getInstituicaoById(curso.idInstituicao) == null) {
+                    throw new Exception("O curso: " + curso.nome + " não foi cadastrado por que o ID da instituição informado é inválido");
+                } else {
+                    Curso.cursos.add(curso);
+                }
+            }
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        } catch (JsonSyntaxException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        init();
+    }
+
+    /**
+     *
+     * @param curso - Similiarmente ao método anterior, esse aqui recebe apenas um objeto do tipo Curso
+     * @throws Exception - A exceção é lançada quando o id da instituição passado não existe nos registros de instituições
+     */
+    public static void setUp(Curso curso) throws Exception {
+        if (Instituicao.getInstituicaoById(curso.idInstituicao) == null) {
+            throw new Exception("O curso: " + curso.nome + " não foi cadastrado por que o ID da instituição informado é inválido");
+        } else {
+            cursos.add(curso);
+            init();
+        }
+    }
+
+    public static void realizarApuracao() {
+        for (Curso curso : Curso.cursos) {
+            try {
+                curso.setListaDeAprovados();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void imprimirListaDeAprovados() {
+        for (Curso curso : Curso.cursos) {
+            System.out.println(curso.getListaDeAprovados());
+        }
+    }
+
+    private static void init() {
+        for (Curso curso: Curso.cursos) {
+            curso.calcularVagasReservadas();
+        }
     }
 
     private String nomeInstituicao() {
-        Instituicao instituicao = Instituicao.getInstituicaoById(idInstituicao);
-
-        if(instituicao != null) {
-            return instituicao.getNome();
+        try {
+            return Instituicao.getNomeInstituicaoById(idInstituicao);
+        } catch (Exception e) {
+            return "Instituição Inválida";
         }
-
-        return "Instituição não encontrada";
     }
 
     public HashMap<Integer, Integer> getVagasReservadas() {
@@ -57,7 +114,7 @@ public class Curso implements Constants {
 
     /**
      * Por ordem de preferência no cálculo das vagas reservadas:
-     * <p>
+     *
      * Tipo 2: Pobre (<= 1,5 salários per capita) + Escola Pública
      * Tipo 4: Não-pobre (> 1,5 salários per capita) + Escola Pública
      * Tipo 3: Não-pobre (> 1,5 salários per capita) + Escola Pública + [Preto, pardo ou indígena]
@@ -86,7 +143,7 @@ public class Curso implements Constants {
         }
     }
 
-    public void setListaDeAprovados(ArrayList<Candidato> candidatos) {
+    public void setListaDeAprovados() throws Exception {
 
         aprovadosVagasComum = new ArrayList<Candidato>();
         aprovadosVagasReservadasTipo1 = new ArrayList<Candidato>();
@@ -94,7 +151,11 @@ public class Curso implements Constants {
         aprovadosVagasReservadasTipo3 = new ArrayList<Candidato>();
         aprovadosVagasReservadasTipo4 = new ArrayList<Candidato>();
 
-        for (Candidato candidato : candidatos) {
+        if (Candidato.getCandidatos().isEmpty()) {
+            throw new Exception("Lista de Candidatos está vazia.");
+        }
+
+        for (Candidato candidato : Candidato.getCandidatos()) {
             if (candidato.getIdCursoPrimeiraOpcao() == this.id) {
                 if (candidato.isTipo1()) {
                     aprovadosVagasReservadasTipo1.add(candidato);
@@ -125,6 +186,11 @@ public class Curso implements Constants {
         });
     }
 
+    /**
+     * @param list - Lista de Aprovados divididos por categorias
+     * @param vagas - Número de vagas correspondente à categoria para limitar a impressão de aprovados
+     * @return Texto formatado dos aprovados por categoria
+     */
     private String getAprovadosFromList(ArrayList list, int vagas) {
         StringBuilder texto = new StringBuilder();
         for (int i = 0; i < list.size() && i < vagas; i++) {
@@ -134,7 +200,7 @@ public class Curso implements Constants {
         return texto.toString();
     }
 
-    public String imprimirListaDeAprovados() {
+    public String getListaDeAprovados() {
         String texto = toString();
         texto += "\n Aprovados em Vaga Comum:\n";
         texto += getAprovadosFromList(aprovadosVagasComum, vagasComuns);

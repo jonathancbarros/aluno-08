@@ -13,7 +13,11 @@ public class Sisu {
 
     private void registrarInstituicoes(FileReader instituicoesJson) {
         Instituicao[] instituicoes = gson.fromJson(instituicoesJson, Instituicao[].class);
-        Instituicao.setUp(instituicoes);
+        try {
+            Instituicao.setUp(instituicoes);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private void registrarCursos(FileReader cursosJson) {

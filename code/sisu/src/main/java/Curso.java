@@ -117,6 +117,15 @@ public class Curso implements Constants {
         return true;
     }
 
+    public static Curso getCursoById(int id) {
+        for (Curso curso: cursos) {
+            if(curso.id == id) {
+                return curso;
+            }
+        }
+        return null;
+    }
+
     private String nomeInstituicao() {
         try {
             return Instituicao.getNomeInstituicaoById(idInstituicao);

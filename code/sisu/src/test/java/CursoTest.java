@@ -53,7 +53,7 @@ public class CursoTest {
         try {
             Instituicao[] instituicoes = gson.fromJson(new FileReader("src/main/resources/instituicoes.json"), Instituicao[].class);
             Instituicao.setUp(instituicoes);
-            Curso curso = gson.fromJson(new FileReader("src/main/resources/arquitetura.json"), Curso.class);
+            Curso[] curso = gson.fromJson(new FileReader("src/main/resources/arquitetura.json"), Curso[].class);
             Curso.setUp(curso);
             Candidato[] candidatos = gson.fromJson(new FileReader("src/main/resources/candidatos_arquitetura.json"), Candidato[].class);
             Candidato.setUp(candidatos);

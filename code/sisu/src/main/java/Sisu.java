@@ -31,7 +31,11 @@ public class Sisu {
 
     private void registrarCandidatos(FileReader candidatosJson) {
         Candidato[] candidatos = gson.fromJson(candidatosJson, Candidato[].class);
-        Candidato.setUp(candidatos);
+        try {
+            Candidato.setUp(candidatos);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
 }

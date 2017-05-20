@@ -1,7 +1,7 @@
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import org.junit.Test;
 import java.io.FileReader;
-import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
@@ -10,17 +10,24 @@ public class CursoTest {
 
     @Test
     public void init() throws Exception {
-        Instituicao[] instituicoes = gson.fromJson(new FileReader("src/main/resources/instituicoes.json"), Instituicao[].class);
-        Instituicao.setUp(instituicoes);
+        try {
+            Instituicao[] instituicoes = gson.fromJson(new FileReader("src/main/resources/instituicoes.json"), Instituicao[].class);
+            Instituicao.setUp(instituicoes);
 
-        Curso[] cursos = gson.fromJson(new FileReader("src/main/resources/2cursos.json"), Curso[].class);
-        Curso.setUp(cursos);
-        assertEquals(Curso.getCursos().isEmpty(), true);
+            Curso[] cursos = gson.fromJson(new FileReader("src/main/resources/2cursos.json"), Curso[].class);
+            Curso.setUp(cursos);
+            assertEquals(Curso.getCursos().isEmpty(), false);
 
-        Curso curso = gson.fromJson(new FileReader("src/main/resources/arquitetura.json"), Curso.class);
-        Curso.setUp(curso);
-
-        assertEquals(Curso.getCursos().isEmpty(), false);
+            Curso curso = gson.fromJson(new FileReader("src/main/resources/arquitetura.json"), Curso.class);
+            Curso.setUp(curso);
+            assertEquals(Curso.getCursos().isEmpty(), false);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        } catch (JsonSyntaxException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @Test

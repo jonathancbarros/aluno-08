@@ -37,37 +37,37 @@ public class Curso implements Constants {
      * Função para receber um array do tipo Curso e adicionar a lista estática de cursos
      * @param cursos
      */
-    public static void setUp(Curso[] cursos) {
-        try {
-            for (Curso curso : Arrays.asList(cursos)) {
-                if (Instituicao.getInstituicaoById(curso.idInstituicao) == null) {
-                    throw new Exception("O curso: " + curso.nome + " não foi cadastrado por que o ID da instituição informado é inválido");
-                } else {
-                    Curso.cursos.add(curso);
-                }
+    public static void setUp(Curso[] cursos) throws Exception {
+        for (Curso curso : Arrays.asList(cursos)) {
+            if (validateCurso(curso)) {
+                Curso.cursos.add(curso);
             }
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        } catch (JsonSyntaxException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
         }
         init();
     }
 
     /**
-     *
-     * @param curso - Similiarmente ao método anterior, esse aqui recebe apenas um objeto do tipo Curso
+     * @param curso - Similarmente ao método anterior, esse aqui recebe apenas um objeto do tipo Curso
      * @throws Exception - A exceção é lançada quando o id da instituição passado não existe nos registros de instituições
      */
     public static void setUp(Curso curso) throws Exception {
-        if (Instituicao.getInstituicaoById(curso.idInstituicao) == null) {
-            throw new Exception("O curso: " + curso.nome + " não foi cadastrado por que o ID da instituição informado é inválido");
-        } else {
+        if (validateCurso(curso)) {
             cursos.add(curso);
             init();
         }
+    }
+
+    private static boolean validateCurso(Curso curso) throws Exception {
+        if (Instituicao.getInstituicaoById(curso.idInstituicao) == null) {
+            throw new Exception("O curso " + curso.nome + " não foi cadastrado por que não há uma Instituição registrada com o ID informado.");
+        } if (!isIdValid(curso.id)) {
+            throw new Exception("O curso " + curso.nome + " não foi cadastrado pois o ID informado já existe.");
+        } if (!isVagasValid(curso.vagasOfertadas)) {
+            throw new Exception("O curso " + curso.nome + " não foi cadastrado pois o número de vagas é um valor inválido.");
+        } if (!isNomeValid(curso)) {
+            throw new Exception("O curso " + curso.nome + " não foi cadastrado pois o nome do curso já foi usado para essa mesma instituição.");
+        }
+        return true;
     }
 
     public static void realizarApuracao() {
@@ -90,6 +90,31 @@ public class Curso implements Constants {
         for (Curso curso: Curso.cursos) {
             curso.calcularVagasReservadas();
         }
+    }
+
+    private static boolean isIdValid(int id) {
+        if (id <= 0)
+            return false;
+
+        for (Curso curso: cursos) {
+            if(curso.id == id) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static boolean isVagasValid(int vagas) {
+        return vagas > 0;
+    }
+
+    private static boolean isNomeValid(Curso newCurso) {
+        for (Curso curso: cursos) {
+            if (curso.nome.equals(newCurso.nome) && curso.idInstituicao == newCurso.idInstituicao) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private String nomeInstituicao() {

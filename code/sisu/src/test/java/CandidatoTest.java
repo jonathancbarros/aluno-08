@@ -25,6 +25,7 @@ public class CandidatoTest {
     public void tearDown() throws Exception {
         Instituicao.reset();
         Curso.reset();
+        Candidato.reset();
     }
 
     @Test

@@ -33,6 +33,10 @@ public class Candidato implements Constants{
         }
     }
 
+    public static void reset() {
+        candidatos.clear();
+    }
+
     private static boolean validate(Candidato candidato) throws Exception {
         if (!isIdValid(candidato.id)) {
             throw new Exception("O candidato " + candidato.nome + " não foi cadastrado pois o ID informado já existe.");
@@ -109,6 +113,10 @@ public class Candidato implements Constants{
 
     public int getIdCursoPrimeiraOpcao() {
         return idCursoPrimeiraOpcao;
+    }
+
+    public int getIdCursoSegundaOpcao() {
+        return idCursoSegundaOpcao;
     }
 
     public double getNotaEnem() {

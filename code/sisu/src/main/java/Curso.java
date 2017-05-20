@@ -13,11 +13,11 @@ public class Curso implements Constants {
     private int vagasComuns;
     private int totalVagasReservadas;
     private HashMap<Integer, Integer> vagasReservadas;
-    private ArrayList<Candidato> aprovadosVagasComum;
-    private ArrayList<Candidato> aprovadosVagasReservadasTipo1;
-    private ArrayList<Candidato> aprovadosVagasReservadasTipo2;
-    private ArrayList<Candidato> aprovadosVagasReservadasTipo3;
-    private ArrayList<Candidato> aprovadosVagasReservadasTipo4;
+    private ArrayList<Candidato> aprovadosVagasComum = new ArrayList<Candidato>();
+    private ArrayList<Candidato> aprovadosVagasReservadasTipo1 = new ArrayList<Candidato>();
+    private ArrayList<Candidato> aprovadosVagasReservadasTipo2 = new ArrayList<Candidato>();
+    private ArrayList<Candidato> aprovadosVagasReservadasTipo3 = new ArrayList<Candidato>();
+    private ArrayList<Candidato> aprovadosVagasReservadasTipo4 = new ArrayList<Candidato>();
 
     public Curso(int id, String nome, int idInstituicao, int vagasOfertadas) {
         this.id = id;
@@ -35,7 +35,7 @@ public class Curso implements Constants {
 
     /**
      * Função para receber um array do tipo Curso e adicionar a lista estática de cursos
-     * @param cursos
+     * @param cursos - Cursos há serem registrados
      */
     public static void setUp(Curso[] cursos) throws Exception {
         for (Curso curso : Arrays.asList(cursos)) {
@@ -77,10 +77,14 @@ public class Curso implements Constants {
     public static void realizarApuracao() {
         for (Curso curso : Curso.cursos) {
             try {
-                curso.setListaDeAprovados();
+                curso.setAprovadosPrimeiraOpcao();
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+
+        for (Curso curso : Curso.cursos) {
+            curso.setAprovadosSegundaOpcao();
         }
     }
 
@@ -93,6 +97,11 @@ public class Curso implements Constants {
     private static void init() {
         for (Curso curso: Curso.cursos) {
             curso.calcularVagasReservadas();
+            curso.aprovadosVagasComum = new ArrayList<Candidato>();
+            curso.aprovadosVagasReservadasTipo1 = new ArrayList<Candidato>();
+            curso.aprovadosVagasReservadasTipo2 = new ArrayList<Candidato>();
+            curso.aprovadosVagasReservadasTipo3 = new ArrayList<Candidato>();
+            curso.aprovadosVagasReservadasTipo4 = new ArrayList<Candidato>();
         }
     }
 
@@ -181,13 +190,7 @@ public class Curso implements Constants {
         }
     }
 
-    public void setListaDeAprovados() throws Exception {
-
-        aprovadosVagasComum = new ArrayList<Candidato>();
-        aprovadosVagasReservadasTipo1 = new ArrayList<Candidato>();
-        aprovadosVagasReservadasTipo2 = new ArrayList<Candidato>();
-        aprovadosVagasReservadasTipo3 = new ArrayList<Candidato>();
-        aprovadosVagasReservadasTipo4 = new ArrayList<Candidato>();
+    public void setAprovadosPrimeiraOpcao() throws Exception {
 
         if (Candidato.getCandidatos().isEmpty()) {
             throw new Exception("Lista de Candidatos está vazia.");
@@ -195,25 +198,34 @@ public class Curso implements Constants {
 
         for (Candidato candidato : Candidato.getCandidatos()) {
             if (candidato.getIdCursoPrimeiraOpcao() == this.id) {
-                if (candidato.isTipo1()) {
-                    aprovadosVagasReservadasTipo1.add(candidato);
-                } else if (candidato.isTipo2()) {
-                    aprovadosVagasReservadasTipo2.add(candidato);
-                } else if (candidato.isTipo3()) {
-                    aprovadosVagasReservadasTipo3.add(candidato);
-                } else if (candidato.isTipo4()) {
-                    aprovadosVagasReservadasTipo4.add(candidato);
-                } else {
-                    aprovadosVagasComum.add(candidato);
-                }
+                addCandidatoToAprovadosList(candidato, this);
             }
         }
 
-        sortList(aprovadosVagasComum);
-        sortList(aprovadosVagasReservadasTipo1);
-        sortList(aprovadosVagasReservadasTipo2);
-        sortList(aprovadosVagasReservadasTipo3);
-        sortList(aprovadosVagasReservadasTipo4);
+        ordenarListasDeAprovados();
+    }
+
+    private void setAprovadosSegundaOpcao() {
+        for (Candidato candidato : Candidato.getCandidatos()) {
+            if (candidato.getIdCursoSegundaOpcao() == this.id && !isCandidatoAprovadoNaPrimeiraOpcao(candidato)) {
+                addCandidatoToAprovadosList(candidato, this);
+            }
+        }
+        ordenarListasDeAprovados();
+    }
+
+    private void addCandidatoToAprovadosList(Candidato candidato, Curso curso) {
+        if (candidato.isTipo1()) {
+            curso.aprovadosVagasReservadasTipo1.add(candidato);
+        } else if (candidato.isTipo2()) {
+            curso.aprovadosVagasReservadasTipo2.add(candidato);
+        } else if (candidato.isTipo3()) {
+            curso.aprovadosVagasReservadasTipo3.add(candidato);
+        } else if (candidato.isTipo4()) {
+            curso.aprovadosVagasReservadasTipo4.add(candidato);
+        } else {
+            curso.aprovadosVagasComum.add(candidato);
+        }
     }
 
     private void sortList(ArrayList list) {
@@ -222,6 +234,50 @@ public class Curso implements Constants {
                 return Double.compare(c2.getNotaEnem(), c1.getNotaEnem());
             }
         });
+    }
+
+    private void ordenarListasDeAprovados() {
+        sortList(aprovadosVagasComum);
+        sortList(aprovadosVagasReservadasTipo1);
+        sortList(aprovadosVagasReservadasTipo2);
+        sortList(aprovadosVagasReservadasTipo3);
+        sortList(aprovadosVagasReservadasTipo4);
+    }
+
+    /**
+     * @param candidato - Candidato a ser verificado
+     * @return true or false caso o Candidato já tenha sido aprovado em algum curso
+     */
+    private boolean isCandidatoAprovadoNaPrimeiraOpcao(Candidato candidato) {
+
+        for (Curso curso: Curso.cursos) {
+            ArrayList<Candidato> listaDeAprovados = curso.aprovadosVagasComum;
+            int vagas = curso.vagasComuns;
+
+            if (candidato.isTipo1()) {
+                listaDeAprovados = curso.aprovadosVagasReservadasTipo1;
+                vagas = curso.vagasReservadas.get(TIPO_1);
+            } else if(candidato.isTipo2()) {
+                listaDeAprovados = curso.aprovadosVagasReservadasTipo2;
+                vagas = curso.vagasReservadas.get(TIPO_2);
+            } else if(candidato.isTipo3()) {
+                listaDeAprovados = curso.aprovadosVagasReservadasTipo3;
+                vagas = curso.vagasReservadas.get(TIPO_3);
+            } else if(candidato.isTipo4()) {
+                listaDeAprovados = curso.aprovadosVagasReservadasTipo4;
+                vagas = curso.vagasReservadas.get(TIPO_4);
+            }
+
+            if (listaDeAprovados != null) {
+                for (int i = 0; i < listaDeAprovados.size() && i < vagas; i++) {
+                    if (listaDeAprovados.get(i) == candidato) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
     /**

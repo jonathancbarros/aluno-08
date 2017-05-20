@@ -1,0 +1,11 @@
+{
+  "id": 1,
+  "nome": "Zarah Maffucci",
+  "escolaPublica": false,
+  "idCursoPrimeiraOpcao": 1,
+  "idCursoSegundaOpcao": 2,
+  "tipoCota": 2,
+  "notaEnem": 904.21,
+  "rendaPerCapita": 1744.56,
+  "etnia": 4
+}

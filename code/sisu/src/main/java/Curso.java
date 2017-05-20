@@ -57,6 +57,10 @@ public class Curso implements Constants {
         }
     }
 
+    public static void reset() {
+        cursos.clear();
+    }
+
     private static boolean validateCurso(Curso curso) throws Exception {
         if (Instituicao.getInstituicaoById(curso.idInstituicao) == null) {
             throw new Exception("O curso " + curso.nome + " não foi cadastrado por que não há uma Instituição registrada com o ID informado.");

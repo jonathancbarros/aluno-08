@@ -1,0 +1,11 @@
+{
+  "id": 1,
+  "nome": "João Henrique dos Santos",
+  "escolaPublica": false,
+  "idCursoPrimeiraOpcao": 2,
+  "idCursoSegundaOpcao": 2,
+  "tipoCota": 6,
+  "notaEnem": -904.21,
+  "rendaPerCapita": 1744.56,
+  "etnia": 6
+}

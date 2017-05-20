@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "nome": "UFMG"
+  },
+  {
+    "id": 2,
+    "nome": "UFAL"
+  },
+  {
+    "id": 3,
+    "nome": "UFPE"
+  },
+  {
+    "id": 4,
+    "nome": "UNCISAL"
+  },
+  {
+    "id": 5,
+    "nome": "IFAL"
+  },
+  {
+    "id": 6,
+    "nome": "UFRJ"
+  },
+  {
+    "id": 7,
+    "nome": "UFRS"
+  },
+  {
+    "id": 8,
+    "nome": "UFSCAR"
+  },
+  {
+    "id": 9,
+    "nome": "USP"
+  },
+  {
+    "id": 10,
+    "nome": "ITA"
+  }
+]

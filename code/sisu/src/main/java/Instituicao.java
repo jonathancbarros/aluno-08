@@ -27,6 +27,10 @@ public class Instituicao {
         }
     }
 
+    public static void reset() {
+        instituicoes.clear();
+    }
+
     private static boolean validate(Instituicao newInstituicao) throws Exception {
         if (newInstituicao.id <= 0)
             throw new Exception("A Instituição " + newInstituicao.nome + " não pode ser cadastrada pois o ID informado é inválido.");
@@ -66,8 +70,16 @@ public class Instituicao {
         return "Instituição não encontrada";
     }
 
+    public static ArrayList<Instituicao> getInstituicoes() {
+        return instituicoes;
+    }
+
     public String getNome() {
         return nome;
+    }
+
+    public int getId() {
+        return id;
     }
 
 }

@@ -1,0 +1,57 @@
+[
+  {
+    "id": 1,
+    "nome": "Zarah Maffucci",
+    "escolaPublica": false,
+    "idCursoPrimeiraOpcao": 1,
+    "idCursoSegundaOpcao": 2,
+    "tipoCota": 2,
+    "notaEnem": 904.21,
+    "rendaPerCapita": 1744.56,
+    "etnia": 4
+  },
+  {
+    "id": 2,
+    "nome": "Phylys Spurier",
+    "escolaPublica": false,
+    "idCursoPrimeiraOpcao": 1,
+    "idCursoSegundaOpcao": 2,
+    "tipoCota": 4,
+    "notaEnem": 82.68,
+    "rendaPerCapita": 994.67,
+    "etnia": 1
+  },
+  {
+    "id": 3,
+    "nome": "Durante Imrie",
+    "escolaPublica": false,
+    "idCursoPrimeiraOpcao": 1,
+    "idCursoSegundaOpcao": 2,
+    "tipoCota": 4,
+    "notaEnem": 914.21,
+    "rendaPerCapita": 1127.44,
+    "etnia": 3
+  },
+  {
+    "id": 4,
+    "nome": "Will Trosdall",
+    "escolaPublica": true,
+    "idCursoPrimeiraOpcao": 1,
+    "idCursoSegundaOpcao": 2,
+    "tipoCota": 1,
+    "notaEnem": 651.86,
+    "rendaPerCapita": 1244.88,
+    "etnia": 3
+  },
+  {
+    "id": 5,
+    "nome": "Frannie Chevis",
+    "escolaPublica": true,
+    "idCursoPrimeiraOpcao": 1,
+    "idCursoSegundaOpcao": 2,
+    "tipoCota": 3,
+    "notaEnem": 241.86,
+    "rendaPerCapita": 725.59,
+    "etnia": 2
+  }
+]

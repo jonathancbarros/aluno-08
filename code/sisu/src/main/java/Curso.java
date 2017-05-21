@@ -198,7 +198,7 @@ public class Curso implements Constants {
 
         for (Candidato candidato : Candidato.getCandidatos()) {
             if (candidato.getIdCursoPrimeiraOpcao() == this.id) {
-                addCandidatoToAprovadosList(candidato, this);
+                addCandidatoToAprovadosList(candidato);
             }
         }
 
@@ -208,23 +208,23 @@ public class Curso implements Constants {
     private void setAprovadosSegundaOpcao() {
         for (Candidato candidato : Candidato.getCandidatos()) {
             if (candidato.getIdCursoSegundaOpcao() == this.id && !isCandidatoAprovadoNaPrimeiraOpcao(candidato)) {
-                addCandidatoToAprovadosList(candidato, this);
+                addCandidatoToAprovadosList(candidato);
             }
         }
         ordenarListasDeAprovados();
     }
 
-    private void addCandidatoToAprovadosList(Candidato candidato, Curso curso) {
+    private void addCandidatoToAprovadosList(Candidato candidato) {
         if (candidato.isTipo1()) {
-            curso.aprovadosVagasReservadasTipo1.add(candidato);
+            this.aprovadosVagasReservadasTipo1.add(candidato);
         } else if (candidato.isTipo2()) {
-            curso.aprovadosVagasReservadasTipo2.add(candidato);
+            this.aprovadosVagasReservadasTipo2.add(candidato);
         } else if (candidato.isTipo3()) {
-            curso.aprovadosVagasReservadasTipo3.add(candidato);
+            this.aprovadosVagasReservadasTipo3.add(candidato);
         } else if (candidato.isTipo4()) {
-            curso.aprovadosVagasReservadasTipo4.add(candidato);
+            this.aprovadosVagasReservadasTipo4.add(candidato);
         } else {
-            curso.aprovadosVagasComum.add(candidato);
+            this.aprovadosVagasComum.add(candidato);
         }
     }
 
